@@ -22,12 +22,42 @@ const server = http.createServer((req, res) => {
             readWrite("index.html", "text/html")
         break;
         case "/api" :
-            res.whriteHead(200, {"Content-Type": "application/json"});
-            let flipResult = Math.random() > 0.5 ? "heads" : "tails"
-            const objToJson = {
-                flip: flipResult
-            }
-            res.end(JSON.stringify(objToJson));
+            if('choice' in params){
+
+                const objToJson = {
+                }
+
+                let botChoice = Math.random() > 0.66 ? "rock" : Math.random() > .33 ? "paper" : "scissors"
+                if(params['choice'] === 'rock' && botChoice === "scissors"){
+                  res.writeHead(200, {'Content-Type': 'application/json'});
+                  objToJson.result = "rock wins!"
+                  objToJson.botChoice = botChoice
+                  res.end(JSON.stringify(objToJson));
+
+                } else if (params["choice"] === "paper" && botChoice === "rock") {
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    objToJson.result = "paper wins!"
+                    objToJson.botChoice = botChoice
+                    res.end(JSON.stringify(objToJson));
+
+                } else if (params["choice"] === "scissors" && botChoice === "paper") {
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    objToJson.result = "scissors wins!"
+                    objToJson.botChoice = botChoice
+                    res.end(JSON.stringify(objToJson));
+                } else if (params["choice"] === botChoice) {
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    objToJson.result = "round tied!"
+                    objToJson.botChoice = botChoice  
+                    res.end(JSON.stringify(objToJson));
+                }
+                else {
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    objToJson.result = "roud lost!"
+                    objToJson.botChoice = botChoice
+                    res.end(JSON.stringify(objToJson));
+                    } 
+                }
         break;
         case "/css/style.css" :
             fs.readFile("css/style.css", function(err, data) {
@@ -55,5 +85,5 @@ const server = http.createServer((req, res) => {
     }
 });
 
-server.listen(3000);
+server.listen(8000);
 
